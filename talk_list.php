@@ -28,13 +28,14 @@ print('</div>');
 print('<div class="col-md-8">');
 $sql_address = "SELECT address FROM sender_2";
 $res_address = $mysqli->query($sql_address);
-while($row_address = $res->fetch_array()) {
-    $sql_mail = "SELECT * FROM received_mail_2 WHERE address = $row_address"
+while($row_address = $res_address->fetch_array()) {
+    $sql_mail = "SELECT * FROM received_mail_2 WHERE address = $row_address";
     $res_mail = $mysqli->query($sql_mail);
     while($row_mail = $res_mail->fetch_array()){
-        print('<h1>'.$row_mail["subject"].'</h1>')
-        print('<p>'.$row_mail["content"].'</p>')
+        print('<h1>'.$row_mail["subject"].'</h1>');
+        print('<p>'.$row_mail["content"].'</p>');
     }
+}
 print('</div>');
 print('</div>');    
 print('</div>');
