@@ -20,27 +20,67 @@ $sql = "SELECT * FROM sender_2";
 $res = $mysqli->query($sql);
 print('<div class="container">');
 print('<div class="row">');
-print('<div class="col-md-3">');
+print('<div id="sender_list" class="col-md-3">');
 while($row = $res->fetch_array()) {
-    print('<p id>'.$row["name"].'</p>');
+    print('<a href="'."#".$row["address"].'">'.$row["name"].'</a>');
 }
 print('</div>');
-print('<div class="col-md-8">');
-$sql_address = "SELECT address FROM sender_2";
+print('<div id="content_list" class="col-md-8">');
+$sql_address = "SELECT * FROM sender_2";
 $res_address = $mysqli->query($sql_address);
 while($row_address = $res_address->fetch_array()) {
-    $sql_mail = "SELECT * FROM received_mail_2 WHERE address = $row_address";
+    print('<div id="'.$row_address["address"].'">');
+    $sql_mail = 'SELECT * FROM received_mail_2 WHERE address = '.'"'.$row_address["address"].'"';
     $res_mail = $mysqli->query($sql_mail);
-    while($row_mail = $res_mail->fetch_array()){
+    while($row_mail = $res_mail->fetch_array()) {
         print('<h1>'.$row_mail["subject"].'</h1>');
         print('<p>'.$row_mail["content"].'</p>');
     }
+print('</div>');
 }
 print('</div>');
-print('</div>');    
+print('</div>');
 print('</div>');
 $res->free();
 ?>
+<script type="text/javascript">
+
+var tabs = document.getElementById('sender_list').getElementsByTagName('a');
+var pages = document.getElementById('content_list').getElementsByTagName('div');
+
+function changeTab() {
+   // ▼href属性値から対象のid名を抜き出す
+   var targetid = this.href.substring(this.href.indexOf('#')+1,this.href.length);
+
+   // ▼指定のタブページだけを表示する
+   for(var i=0; i<pages.length; i++) {
+      if( pages[i].id != targetid ) {
+         pages[i].style.display = "none";
+      }else{
+         pages[i].style.display = "block";
+      }
+   }
+
+   // ▼クリックされたタブを前面に表示する
+   for(var i=0; i<tabs.length; i++) {
+
+    tabs[i].style.zIndex = "0";
+   }
+   this.style.zIndex = "10";
+
+   // ▼ページ遷移しないようにfalseを返す
+   return false;
+}
+
+// ▼すべてのタブに対して、クリック時にchangeTab関数が実行されるよう指定する
+for(var i=0; i<tabs.length; i++) {
+   tabs[i].onclick = changeTab;
+}
+
+// ▼最初は先頭のタブを選択
+tabs[0].onclick();
+
+</script>
 <!-- jQuery,Popper.js,Bootstrap JSの順番で読み込む-->
 <!-- jQueryの読み込み -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -50,3 +90,5 @@ $res->free();
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
